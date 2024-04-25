@@ -213,9 +213,21 @@ to proactiveBehavior
   
   
   ; For testing purposes
-  let StateList (list "Study" "Work" "Unemployed" "WalkingAround" "MeetingFriends" "Go_out" "Political" "Demonstration")
+  let StateList ["Study" "Work" "Unemployed" "WalkingAround" "MeetingFriends" "Go_out" "Political" "Demonstration"]
   
+  set vWalk vWalk + random-float 1.0
+  set vMeet vMeet + random-float 1.0
+  set vRest vRest + random-float 1.0
   
+  ifelse vWalk >= max (list vMeet vRest) [
+    set proState "WalkingAround"
+  ] [
+    ifelse vMeet > vRest [
+      set proState "MeetingFriends"
+    ] [
+      set proState "Go_out"
+    ]
+  ]
   
   ;########## Deliberation of states, e.g. deciding on new states depending on new beliefs ##############
   ; OBS: when changing a current state to a new and different state, some variables might need to be reset,
@@ -223,9 +235,7 @@ to proactiveBehavior
   ;
   
   ; For testing
-  set proState item (random 3) StateList
-  if Debug [print (word who "deliberated proState = " proState)]
-  
+  if Debug [ print (word who " deliberated proState = " proState) ]  
   
   ; "Finite State Machine" 
   (ifelse
@@ -281,3 +291,7 @@ to demonstrate
 end
 
 ;""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+
+
