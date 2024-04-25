@@ -1,8 +1,6 @@
 ; DIS-PT_chpt6
 ; template for the programming task with cops and citizen agents
 ;
-;Grupp 7
-;Grupp 5
 ; hej
 ; HOW TO WORK WITH THIS FILE:
 ;
@@ -279,7 +277,7 @@ num-citizens
 num-citizens
 1
 150
-79.0
+51.0
 1
 1
 NIL
@@ -328,7 +326,7 @@ num-cops
 num-cops
 0
 150
-61.0
+0.0
 1
 1
 NIL

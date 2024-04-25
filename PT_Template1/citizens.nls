@@ -224,8 +224,10 @@ to proactiveBehavior
   ] [
     ifelse vMeet > vRest [
       set proState "MeetingFriends"
+      set color orange
     ] [
       set proState "Go_out"
+      set color pink
     ]
   ]
   
