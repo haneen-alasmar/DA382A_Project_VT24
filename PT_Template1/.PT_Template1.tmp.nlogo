@@ -3,6 +3,8 @@
 ;
 ; HOW TO WORK WITH THIS FILE:
 
+
+;; test fatima
 ;
 ; 1. Bransch this file from Github for your group
 ; 2. Divide the work from the task to your group members, so that every group member has at least one own task
@@ -10,9 +12,6 @@
 ; 4. Start with your individual tasks development and make push- and pulls between your individual bransches as needed
 ; 5. When the individual tasks are finished you need to merge the different parts back into the original group-bransch
 ; 6. Make sure that the final version works before uploading it under PT_chpt6 on Canvas.
-;
-;
-
 
 
 
@@ -102,6 +101,7 @@ to setup
   clear-all
   ; define global variables that are not set as sliders
   set max-jailterm 10
+
 
   set numFreeCitizens 0
 
