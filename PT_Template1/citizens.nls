@@ -61,12 +61,9 @@ citizens-own [
   minCinema ;---------Min-value for Going to Cinema after fulfillment of desire
   thrCinema ;---------Threshold for Going to Cinema -desire
   
-  vSpeech ;-------------Value for the desire to hold a speech or participate in a political event
-  minSpeech ;-----------Min-value for vSpeech after fulfilling the desire
+
   thrSpeech ;-----------Threshold for vSpeech to trigger the "Political" state
-  dSpeech ;-------------Increase of vSpeech per week in percentage
-  percFrust ;---------Percentage of frustration decrease after holding a speech or attending a political event
- 
+
   
   ;different help-variables
   counter; -----------general purpose counter
@@ -92,15 +89,11 @@ to setup-citizens
     set walkdesire? false
     set counter 0 ; all-purpose counter
     set numPrisoners 0
-    set vSpeech 0
-    set minSpeech 0.2  
     set thrSpeech 0.8
     set vFrust 20
-    set percFrust 20 ; frustration decreases 20% after holding a speech
     
     ;test
     set vFrust random-float 1.0
-    set thrSpeech 0.8
     set vWalk random-float 1.0
     set thrWalk 0.7
     set vMeet random-float 1.0
@@ -224,17 +217,17 @@ to hold-speech
   ]
   ; Hold a speech for 15 minutes (1 tick = 1 minute???????)
   if localxy = locTownSquare [
-    set counter counter + 1
-    if counter = 15 [
-      set vSpeech minSpeech
-      set pcolor red
-      set vFrust vFrust * (1 - percFrust / 100)
+    ; Increment a counter to keep track of speech duration
+    set counter (counter + 1)
+    set pcolor pink
+    if counter = 15 [ 
+      ; speech done
       set counter 0
-      set destinationxy homeLoc
+      ; Frust goes down after speech
+      set vFrust (vFrust - 20)
+      stop
     ]
-    stop
   ]
-  
   ; Go home after the speech
   if localxy != homeLoc [
     moveToDestxy
@@ -259,7 +252,7 @@ to proactiveBehavior
  if  vFrust > thrSpeech and (vWalk > 0.9 * thrWalk or vMeet > 0.9 * thrMeet or vRest > 0.9 * thrRest) [
   type (word " Agent "who " is holding a speech or attending a political event")    
   ifelse any? other citizens with [proState = "Political"] [     
-    set proState "PoliticalEvent"
+    set proState "Political"
   ][
     set proState "HoldSpeech"
   ] 
@@ -285,7 +278,7 @@ to proactiveBehavior
     proState = "Go_out" [go_out]
     proState = "Political" [political]
     proState = "Demonstration" [demonstrate]  
-    proState = "HoldSpeech" [hold-speech]  
+    proState = "Political" [hold-speech]  
     ; add more states here, the order does not matter
   )
  

@@ -171,8 +171,6 @@ to go
 
   ]
 
-  if ticks mod 168 = 0 [ask citizens [update-vSpeech]]
-
   ;recorder
  if vid:recorder-status = "recording" [
     if Source = "Only View" [vid:record-view] ; records the plane
