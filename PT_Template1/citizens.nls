@@ -89,17 +89,10 @@ to setup-citizens
     set walkdesire? false
     set counter 0 ; all-purpose counter
     set numPrisoners 0
-    set thrSpeech 0.8
-    set vFrust 20
     
-    ;test
-    set vFrust random-float 1.0
-    set vWalk random-float 1.0
-    set thrWalk 0.7
-    set vMeet random-float 1.0
-    set thrMeet 0.7
-    set vRest random-float 1.0
-    set thrRest 0.7
+    set thrSpeech 0.8
+    set vFrust 0.3
+
   ]
 end
 
@@ -208,32 +201,6 @@ to moveToDestxy
 end
 
 
-to hold-speech
-  ; Go to the town square
-  if localxy != locTownSquare [
-    set destinationxy locTownSquare
-    moveToDestxy
-    stop
-  ]
-  ; Hold a speech for 15 minutes (1 tick = 1 minute???????)
-  if localxy = locTownSquare [
-    ; Increment a counter to keep track of speech duration
-    set counter (counter + 1)
-    set pcolor pink
-    if counter = 15 [ 
-      ; speech done
-      set counter 0
-      ; Frust goes down after speech
-      set vFrust (vFrust - 20)
-      stop
-    ]
-  ]
-  ; Go home after the speech
-  if localxy != homeLoc [
-    moveToDestxy
-  ]
-end
-
 ;"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
@@ -247,16 +214,12 @@ to proactiveBehavior
   ; For testing purposes
   let StateList (list "Study" "Work" "Unemployed" "WalkingAround" "MeetingFriends" "Go_out" "Political" "Demonstration")
   
-  ; Deliberation of free speech goals # pursue of happiness goals
-  ;flagWeekend and
- if  vFrust > thrSpeech and (vWalk > 0.9 * thrWalk or vMeet > 0.9 * thrMeet or vRest > 0.9 * thrRest) [
-  type (word " Agent "who " is holding a speech or attending a political event")    
-  ifelse any? other citizens with [proState = "Political"] [     
+
+  ; If the frustration is higher than the thrSpeech and 2 out of 3 ’Pursue of happiness goals’ have vValues close to the max value (>0.9), Then proState=’Political’
+  if (vFrust > thrSpeech) and (vWalk > 0.9 * thrWalk or vMeet > 0.9 * thrMeet or vRest > 0.9 * thrRest) [
     set proState "Political"
-  ][
-    set proState "HoldSpeech"
-  ] 
-]
+  ]
+
   
   ;########## Deliberation of states, e.g. deciding on new states depending on new beliefs ##############
   ; OBS: when changing a current state to a new and different state, some variables might need to be reset,
@@ -278,7 +241,6 @@ to proactiveBehavior
     proState = "Go_out" [go_out]
     proState = "Political" [political]
     proState = "Demonstration" [demonstrate]  
-    proState = "Political" [hold-speech]  
     ; add more states here, the order does not matter
   )
  
