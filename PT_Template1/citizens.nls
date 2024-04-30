@@ -91,7 +91,7 @@ to setup-citizens
     set numPrisoners 0
     
     set thrSpeech 0.8
-    set vFrust 0.3
+    set vFrust 0.5
 
   ]
 end
@@ -225,10 +225,11 @@ to proactiveBehavior
   ; OBS: when changing a current state to a new and different state, some variables might need to be reset,
   ; like for example walkdesire?, destinationxy, etc.
   ;
-  
   ; For testing
   set proState item (random 3) StateList
   if Debug [print (word who "deliberated proState = " proState)]
+  
+  ; frust ska öka varje gång man är i deliberation stage
   
   
   ; "Finite State Machine" 
@@ -276,12 +277,36 @@ to go_out
   set destinationxy one-of patches with [region = "Restaurant"]
 end
 
-to political
-  if Debug [print (word who " is in the proactive state Political")]
-end
 
 to demonstrate
   if Debug [print (word who " is in the proactive state Demonstration")]
+end
+
+to political
+  ; Go to the town square
+  if Debug [print (word who " is in the proactive state Political")]
+  if localxy != locTownSquare [
+    set destinationxy locTownSquare
+    moveToDestxy
+    stop
+  ]
+  ; Hold a speech for 15 minutes (1 tick = 1 minute???????)
+  if localxy = locTownSquare [
+    ; Increment a counter to keep track of speech duration
+    set counter (counter + 1)
+    set pcolor pink
+    if counter = 15 [ 
+      ; speech done
+      set counter 0
+      ; Frust goes down after speech
+      set vFrust (vFrust - 1)
+      stop
+    ]
+  ]
+  ; Go home after the speech
+  if localxy != homeLoc [
+    moveToDestxy
+  ]
 end
 
 
