@@ -5,7 +5,7 @@
 
 
 ;; test fatima
-; test alice
+
 ;
 ; 1. Bransch this file from Github for your group
 ; 2. Divide the work from the task to your group members, so that every group member has at least one own task
